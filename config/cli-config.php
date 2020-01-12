@@ -8,11 +8,8 @@ use Doctrine\ORM\Tools\Console\Helper\EntityManagerHelper;
 use Symfony\Component\Console\Helper\HelperSet;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
-include __DIR__ . '/../vendor/autoload.php';
-include __DIR__ . '/../postautoload.php';
-
 /** @var ContainerBuilder $container */
-$container = include __DIR__ . '/container.php';
+$container = include __DIR__ . '/../bootstrap.php';
 
 /** @var EntityManager $entityManager */
 $entityManager = $container->get('entityManager');

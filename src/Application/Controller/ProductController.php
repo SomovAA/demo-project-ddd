@@ -8,14 +8,21 @@ use Exception;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 
-class ProductController
+class ProductController extends AbstractController
 {
-    public function generateProducts(ProductService $productService): JsonResponse
+    private $productService;
+
+    public function __construct(ProductService $productService)
+    {
+        $this->productService = $productService;
+    }
+
+    public function generateProducts(): JsonResponse
     {
         try {
-            $products = $productService->generateProducts();
+            $products = $this->productService->generateProducts();
         } catch (Exception $exception) {
-            return JsonResponse::create($exception->getMessage(), Response::HTTP_CONFLICT);
+            return JsonResponse::create($exception->getMessage(), Response::HTTP_BAD_REQUEST);
         }
 
         $data = [];

@@ -3,6 +3,7 @@
 namespace Application\Entity\Order;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Embeddable
@@ -14,12 +15,21 @@ class OrderStatus
 
     /**
      * @ORM\Column(type="string")
+     * @Assert\Choice(
+     *     choices={"new", "paid"},
+     *     message="Статус указан некорректно"
+     * )
      */
     private $status;
 
-    public function __construct(string $status = self::NEW)
+    public function __construct(string $status)
     {
         $this->status = $status;
+    }
+
+    public static function createNew()
+    {
+        return new static(self::NEW);
     }
 
     public function getStatus(): string

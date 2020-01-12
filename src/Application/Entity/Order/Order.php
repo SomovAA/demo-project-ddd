@@ -43,7 +43,7 @@ class Order
     public function __construct()
     {
         $this->products = new ArrayCollection();
-        $this->status = new OrderStatus();
+        $this->status = OrderStatus::createNew();
     }
 
     public function getId(): int

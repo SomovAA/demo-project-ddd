@@ -33,4 +33,7 @@ return [
         'url' => getenv('PAYMENT_SYSTEM_URL'),
     ],
     'debug' => getenv('DEBUG'),
+    'translator' => [
+        'resource' => __DIR__ . '/../vendor/symfony/validator/Resources/translations/validators.ru.xlf',
+    ],
 ];

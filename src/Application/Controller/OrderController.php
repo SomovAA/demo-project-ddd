@@ -2,36 +2,54 @@
 
 namespace Application\Controller;
 
+use Application\Constraint\Command as Command;
 use Application\Service\OrderService;
 use Exception;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 
-class OrderController
+class OrderController extends AbstractController
 {
-    public function create(Request $request, OrderService $orderService): JsonResponse
+    private $orderService;
+
+    public function __construct(OrderService $orderService)
     {
-        $productIds = (array)$request->request->get('productIds', []);
+        $this->orderService = $orderService;
+    }
+
+    public function create(Request $request, ValidatorInterface $validator): JsonResponse
+    {
+        $value = new Command\Order\Create($request);
+        $violations = $validator->validate($value);
+
+        if ($messages = $this->getViolationMessages($violations)) {
+            return JsonResponse::create($messages, Response::HTTP_BAD_REQUEST);
+        }
 
         try {
-            $order = $orderService->create($productIds);
+            $order = $this->orderService->create($value->getProductIds());
         } catch (Exception $exception) {
-            return JsonResponse::create($exception->getMessage(), Response::HTTP_CONFLICT);
+            return JsonResponse::create($exception->getMessage(), Response::HTTP_BAD_REQUEST);
         }
 
         return JsonResponse::create($order->getId());
     }
 
-    public function pay(Request $request, OrderService $orderService): JsonResponse
+    public function pay(Request $request, ValidatorInterface $validator): JsonResponse
     {
-        $price = (float)$request->request->get('price', 0.0);
-        $id = (int)$request->request->get('orderId', 0);
+        $value = new Command\Order\Pay($request);
+        $violations = $validator->validate($value);
+
+        if ($messages = $this->getViolationMessages($violations)) {
+            return JsonResponse::create($messages, Response::HTTP_BAD_REQUEST);
+        }
 
         try {
-            $orderService->pay($price, $id);
+            $this->orderService->pay($value->getPrice(), $value->getOrderId());
         } catch (Exception $exception) {
-            return JsonResponse::create($exception->getMessage(), Response::HTTP_CONFLICT);
+            return JsonResponse::create($exception->getMessage(), Response::HTTP_BAD_REQUEST);
         }
 
         return JsonResponse::create('success');
