@@ -3,6 +3,7 @@
 namespace Application\Service;
 
 use Application\Entity\Order\Order;
+use Application\Exception\Order\OrderIsAlreadyPaidException;
 use Application\Exception\Order\OrderNotFoundException;
 use Application\Exception\Order\OrderNotNewException;
 use Application\Exception\Order\OrderPaymentFailedException;
@@ -63,6 +64,7 @@ class OrderService
      * @throws OrderNotNewException
      * @throws OrderPaymentFailedException
      * @throws OrderPriceDoesNotMatchException
+     * @throws OrderIsAlreadyPaidException
      */
     public function pay(float $price, int $id): Order
     {

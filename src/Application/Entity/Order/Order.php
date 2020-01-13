@@ -3,6 +3,8 @@
 namespace Application\Entity\Order;
 
 use Application\Entity\Product\Product;
+use Application\Exception\Order\OrderIsAlreadyNewException;
+use Application\Exception\Order\OrderIsAlreadyPaidException;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -59,13 +61,25 @@ class Order
         return $this->status->isPaid();
     }
 
+    /**
+     * @throws OrderIsAlreadyNewException
+     */
     public function makeNew(): void
     {
+        if ($this->isNew()) {
+            throw new OrderIsAlreadyNewException();
+        }
         $this->status->makeNew();
     }
 
+    /**
+     * @throws OrderIsAlreadyPaidException
+     */
     public function makePaid(): void
     {
+        if ($this->isPaid()) {
+            throw new OrderIsAlreadyPaidException();
+        }
         $this->status->makePaid();
     }
 
