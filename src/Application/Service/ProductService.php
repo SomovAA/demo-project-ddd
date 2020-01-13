@@ -2,7 +2,7 @@
 
 namespace Application\Service;
 
-use Application\Repository\ProductRepository;
+use Application\Repository\ProductRepositoryInterface;
 
 class ProductService
 {
@@ -11,7 +11,7 @@ class ProductService
     private $transactionManager;
 
     public function __construct(
-        ProductRepository $productRepository,
+        ProductRepositoryInterface $productRepository,
         FixtureService $fixtureService,
         TransactionManagerInterface $transactionManager
     ) {

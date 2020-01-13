@@ -4,16 +4,21 @@ namespace Application\Factory;
 
 use Application\Entity\Order\Order;
 use Application\Repository\OrderRepository;
-use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\EntityRepository;
+use Doctrine\Persistence\ObjectRepository;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 class OrderRepositoryFactory
 {
     public static function create(ContainerInterface $container)
     {
-        /** @var EntityManager $entityManager */
+        /** @var EntityManagerInterface $entityManager */
         $entityManager = $container->get('entityManager');
 
-        return new OrderRepository($entityManager, $entityManager->getRepository(Order::class));
+        /** @var ObjectRepository|EntityRepository $repository */
+        $repository = $entityManager->getRepository(Order::class);
+
+        return new OrderRepository($entityManager, $repository);
     }
 }

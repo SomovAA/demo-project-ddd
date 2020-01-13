@@ -2,11 +2,11 @@
 
 namespace Application\ArgumentResolver;
 
-use Application\Repository\OrderRepository;
-use Application\Repository\ProductRepository;
+use Application\Repository\OrderRepositoryInterface;
+use Application\Repository\ProductRepositoryInterface;
 use Application\Service\OrderService;
 use Application\Service\PaymentSystemService;
-use Application\Service\TransactionManager;
+use Application\Service\TransactionManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Controller\ArgumentValueResolverInterface;
 use Symfony\Component\HttpKernel\ControllerMetadata\ArgumentMetadata;
@@ -19,10 +19,10 @@ class OrderServiceValueResolver implements ArgumentValueResolverInterface
     private $transactionManager;
 
     public function __construct(
-        OrderRepository $orderRepository,
-        ProductRepository $productRepository,
+        OrderRepositoryInterface $orderRepository,
+        ProductRepositoryInterface $productRepository,
         PaymentSystemService $paymentSystemService,
-        TransactionManager $transactionManager
+        TransactionManagerInterface $transactionManager
     ) {
         $this->orderRepository = $orderRepository;
         $this->productRepository = $productRepository;

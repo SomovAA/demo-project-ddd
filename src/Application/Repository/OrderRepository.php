@@ -3,52 +3,99 @@
 namespace Application\Repository;
 
 use Application\Entity\Order\Order;
-use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
-use Doctrine\ORM\OptimisticLockException;
-use Doctrine\ORM\ORMException;
 
-class OrderRepository
+class OrderRepository implements OrderRepositoryInterface
 {
     private $entityManager;
     private $entityRepository;
 
-    public function __construct(EntityManager $entityManager, EntityRepository $entityRepository)
+    public function __construct(EntityManagerInterface $entityManager, EntityRepository $entityRepository)
     {
         $this->entityManager = $entityManager;
         $this->entityRepository = $entityRepository;
     }
 
     /**
-     * @param int $id
+     * @param Order $object
+     *
+     * @return void
+     */
+    public function create($object)
+    {
+        $this->entityManager->persist($object);
+        $this->entityManager->flush();
+    }
+
+    /**
+     * @param Order $object
+     *
+     * @return void
+     */
+    public function update($object)
+    {
+        $this->entityManager->persist($object);
+        $this->entityManager->flush();
+    }
+
+    /**
+     * @param Order $object
+     *
+     * @return void
+     */
+    public function delete($object)
+    {
+        $this->entityManager->remove($object);
+        $this->entityManager->flush();
+    }
+
+    /**
+     * @param $id
      *
      * @return object|null|Order
      */
-    public function find(int $id): ?Order
+    public function find($id)
     {
         return $this->entityRepository->find($id);
     }
 
     /**
-     * @param Order $order
-     *
-     * @throws ORMException
-     * @throws OptimisticLockException
+     * @return array|object[]|Order[]
      */
-    public function create(Order $order): void
+    public function findAll()
     {
-        $this->entityManager->persist($order);
-        $this->entityManager->flush($order);
+        return $this->entityRepository->findAll();
     }
 
     /**
-     * @param Order $order
+     * @param array $criteria
+     * @param array|null $orderBy
+     * @param null $limit
+     * @param null $offset
      *
-     * @throws ORMException
-     * @throws OptimisticLockException
+     * @return array|object[]|Order[]
      */
-    public function save(Order $order): void
+    public function findBy(array $criteria, ?array $orderBy = null, $limit = null, $offset = null)
     {
-        $this->entityManager->flush($order);
+        return $this->entityRepository->findBy($criteria, $orderBy, $limit, $offset);
+    }
+
+    /**
+     * @param array $criteria
+     *
+     * @return object|null|Order
+     */
+    public function findOneBy(array $criteria)
+    {
+        return $this->entityRepository->findOneBy($criteria);
+    }
+
+    /**
+     * @return string
+     */
+    public function getClassName()
+    {
+        return $this->entityRepository->getClassName();
     }
 }

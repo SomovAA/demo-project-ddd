@@ -6,16 +6,21 @@ use Application\Service\FixtureService;
 use Doctrine\Common\DataFixtures\Executor\ORMExecutor;
 use Doctrine\Common\DataFixtures\Loader;
 use Doctrine\Common\DataFixtures\Purger\ORMPurger;
-use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 class FixtureServiceFactory
 {
     public static function create(ContainerInterface $container)
     {
-        /** @var EntityManager $entityManager */
+        /** @var EntityManagerInterface $entityManager */
         $entityManager = $container->get('entityManager');
-        $directory = $container->getParameter('config')['fixtures']['directory'];
+
+        /** @var array $config */
+        $config = $container->getParameter('config');
+
+        /** @var string $directory */
+        $directory = $config['fixtures']['directory'];
 
         $loader = new Loader();
         $loader->loadFromDirectory($directory);

@@ -2,14 +2,13 @@
 
 namespace Application\Service;
 
-use Doctrine\ORM\EntityManager;
-use Throwable;
+use Doctrine\ORM\EntityManagerInterface;
 
 class TransactionManager implements TransactionManagerInterface
 {
     private $entityManager;
 
-    public function __construct(EntityManager $entityManager)
+    public function __construct(EntityManagerInterface $entityManager)
     {
         $this->entityManager = $entityManager;
     }
@@ -19,11 +18,6 @@ class TransactionManager implements TransactionManagerInterface
         $this->entityManager->beginTransaction();
     }
 
-    /**
-     * @param $func
-     *
-     * @throws Throwable
-     */
     public function transactional($func)
     {
         $this->entityManager->transactional($func);

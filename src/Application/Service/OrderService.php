@@ -3,14 +3,13 @@
 namespace Application\Service;
 
 use Application\Entity\Order\Order;
-use Application\Exception\Order\OrderIsAlreadyPaidException;
 use Application\Exception\Order\OrderNotFoundException;
 use Application\Exception\Order\OrderNotNewException;
 use Application\Exception\Order\OrderPaymentFailedException;
 use Application\Exception\Order\OrderPriceDoesNotMatchException;
 use Application\Exception\Order\OrderWithoutProductCannotBeCreatedException;
-use Application\Repository\OrderRepository;
-use Application\Repository\ProductRepository;
+use Application\Repository\OrderRepositoryInterface;
+use Application\Repository\ProductRepositoryInterface;
 
 class OrderService
 {
@@ -20,8 +19,8 @@ class OrderService
     private $transactionManager;
 
     public function __construct(
-        OrderRepository $orderRepository,
-        ProductRepository $productRepository,
+        OrderRepositoryInterface $orderRepository,
+        ProductRepositoryInterface $productRepository,
         PaymentSystemService $paymentSystemService,
         TransactionManagerInterface $transactionManager
     ) {
@@ -39,7 +38,7 @@ class OrderService
      */
     public function create(array $productIds): Order
     {
-        $products = $this->productRepository->findByIds($productIds);
+        $products = $this->productRepository->findBy(['id' => $productIds]);
 
         if (!$products) {
             throw new OrderWithoutProductCannotBeCreatedException();
@@ -59,12 +58,11 @@ class OrderService
      * @param float $price
      * @param int $id
      *
-     * @return Order
+     * @return object|Order
      * @throws OrderNotFoundException
      * @throws OrderNotNewException
      * @throws OrderPaymentFailedException
      * @throws OrderPriceDoesNotMatchException
-     * @throws OrderIsAlreadyPaidException
      */
     public function pay(float $price, int $id): Order
     {

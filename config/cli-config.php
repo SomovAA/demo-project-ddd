@@ -3,7 +3,7 @@
 use Doctrine\DBAL\Tools\Console\Helper\ConnectionHelper;
 use Doctrine\Migrations\Configuration\Configuration;
 use Doctrine\Migrations\Tools\Console\Helper\ConfigurationHelper;
-use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Tools\Console\Helper\EntityManagerHelper;
 use Symfony\Component\Console\Helper\HelperSet;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -11,7 +11,7 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 /** @var ContainerBuilder $container */
 $container = require __DIR__ . '/bootstrap.php';
 
-/** @var EntityManager $entityManager */
+/** @var EntityManagerInterface $entityManager */
 $entityManager = $container->get('entityManager');
 
 /** @var array $config */

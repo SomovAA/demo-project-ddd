@@ -12,6 +12,8 @@ class PaymentSystemServiceFactory
     {
         /** @var Client $client */
         $client = $container->get('client');
+
+        /** @var array $config */
         $config = $container->getParameter('config');
 
         return new PaymentSystemService($client, $config);

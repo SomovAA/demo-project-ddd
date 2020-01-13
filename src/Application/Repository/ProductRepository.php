@@ -3,35 +3,66 @@
 namespace Application\Repository;
 
 use Application\Entity\Product\Product;
-use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
 
-class ProductRepository
+class ProductRepository implements ProductRepositoryInterface
 {
     private $entityManager;
     private $entityRepository;
 
-    public function __construct(EntityManager $entityManager, EntityRepository $entityRepository)
+    public function __construct(EntityManagerInterface $entityManager, EntityRepository $entityRepository)
     {
         $this->entityManager = $entityManager;
         $this->entityRepository = $entityRepository;
     }
 
     /**
-     * @return Product[]|array
+     * @param $id
+     *
+     * @return object|null|Product
      */
-    public function findAll(): array
+    public function find($id)
+    {
+        return $this->entityRepository->find($id);
+    }
+
+    /**
+     * @return array|object[]|Product[]
+     */
+    public function findAll()
     {
         return $this->entityRepository->findAll();
     }
 
     /**
-     * @param array $ids
+     * @param array $criteria
+     * @param array|null $orderBy
+     * @param null $limit
+     * @param null $offset
      *
-     * @return Product[]
+     * @return array|object[]|Product[]
      */
-    public function findByIds(array $ids): array
+    public function findBy(array $criteria, ?array $orderBy = null, $limit = null, $offset = null)
     {
-        return $this->entityRepository->findBy(['id' => $ids]);
+        return $this->entityRepository->findBy($criteria, $orderBy, $limit, $offset);
+    }
+
+    /**
+     * @param array $criteria
+     *
+     * @return object|null|Product
+     */
+    public function findOneBy(array $criteria)
+    {
+        return $this->entityRepository->findOneBy($criteria);
+    }
+
+    /**
+     * @return string
+     */
+    public function getClassName()
+    {
+        return $this->entityRepository->getClassName();
     }
 }

@@ -2,10 +2,10 @@
 
 namespace Application\ArgumentResolver;
 
-use Application\Repository\ProductRepository;
+use Application\Repository\ProductRepositoryInterface;
 use Application\Service\FixtureService;
 use Application\Service\ProductService;
-use Application\Service\TransactionManager;
+use Application\Service\TransactionManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Controller\ArgumentValueResolverInterface;
 use Symfony\Component\HttpKernel\ControllerMetadata\ArgumentMetadata;
@@ -17,9 +17,9 @@ class ProductServiceValueResolver implements ArgumentValueResolverInterface
     private $transactionManager;
 
     public function __construct(
-        ProductRepository $productRepository,
+        ProductRepositoryInterface $productRepository,
         FixtureService $fixtureService,
-        TransactionManager $transactionManager
+        TransactionManagerInterface $transactionManager
     ) {
         $this->productRepository = $productRepository;
         $this->fixtureService = $fixtureService;
