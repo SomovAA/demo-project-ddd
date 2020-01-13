@@ -5,7 +5,6 @@ namespace Application\Entity\User;
 class DummyUser
 {
     private $id = 1;
-
     private $login = 'admin';
 
     public function getId(): int

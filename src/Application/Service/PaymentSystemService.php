@@ -10,7 +10,6 @@ use Symfony\Component\HttpFoundation\Response;
 class PaymentSystemService
 {
     private $client;
-
     private $config;
 
     public function __construct(Client $client, array $config)

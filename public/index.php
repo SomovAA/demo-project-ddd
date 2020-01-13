@@ -5,7 +5,7 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpFoundation\Request;
 
 /** @var ContainerBuilder $container */
-$container = include __DIR__ . '/../bootstrap.php';
+$container = require dirname(__DIR__) . '/config/bootstrap.php';
 
 /** @var Application $application */
 $application = $container->get('application');

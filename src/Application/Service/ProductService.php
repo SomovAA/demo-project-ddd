@@ -7,9 +7,7 @@ use Application\Repository\ProductRepository;
 class ProductService
 {
     private $productRepository;
-
     private $fixtureService;
-
     private $transactionManager;
 
     public function __construct(

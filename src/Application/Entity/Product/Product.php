@@ -19,14 +19,12 @@ class Product
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
-
     /**
      * @ORM\Column(type="string")
      * @Assert\NotBlank()
      * @Assert\Length(min="1")
      */
     private $name;
-
     /**
      * @ORM\Column(type="float")
      * @Assert\NotBlank()
@@ -34,7 +32,6 @@ class Product
      * @Assert\Range(min="0")
      */
     private $price;
-
     /**
      * @ORM\ManyToMany(targetEntity="Application\Entity\Order\Order", mappedBy="products", cascade={"persist"})
      * @var Collection

@@ -6,14 +6,7 @@ use Doctrine\Common\DataFixtures\Executor\ORMExecutor;
 
 class FixtureService
 {
-    /**
-     * @var ORMExecutor
-     */
     private $executor;
-
-    /**
-     * @var array
-     */
     private $fixtures;
 
     public function __construct(ORMExecutor $executor, array $fixtures)

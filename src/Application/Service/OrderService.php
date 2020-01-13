@@ -14,11 +14,8 @@ use Application\Repository\ProductRepository;
 class OrderService
 {
     private $orderRepository;
-
     private $productRepository;
-
     private $paymentSystemService;
-
     private $transactionManager;
 
     public function __construct(

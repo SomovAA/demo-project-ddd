@@ -5,9 +5,13 @@ use Doctrine\Common\Annotations\AnnotationRegistry;
 use Dotenv\Dotenv;
 
 /** @var ClassLoader $loader */
-$loader = include __DIR__ . '/vendor/autoload.php';
+$loader = require dirname(__DIR__) . '/vendor/autoload.php';
 
-$dotEnv = Dotenv::createImmutable(__DIR__);
+if (!class_exists(Dotenv::class)) {
+    throw new RuntimeException('Please run "composer require vlucas/phpdotenv" to load the ".env" files configuring the application.');
+}
+
+$dotEnv = Dotenv::createImmutable(dirname(__DIR__), ['.env']);
 $dotEnv->load();
 
 if (getenv('DEBUG')) {
@@ -20,4 +24,4 @@ AnnotationRegistry::registerLoader(function ($class) use ($loader) {
     return $loader->loadClass($class);
 });
 
-return include __DIR__ . '/config/container.php';
+return require __DIR__ . '/container.php';

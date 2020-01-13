@@ -9,7 +9,6 @@ use Doctrine\ORM\EntityRepository;
 class ProductRepository
 {
     private $entityManager;
-
     private $entityRepository;
 
     public function __construct(EntityManager $entityManager, EntityRepository $entityRepository)

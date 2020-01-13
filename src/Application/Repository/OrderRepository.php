@@ -11,13 +11,10 @@ use Doctrine\ORM\ORMException;
 class OrderRepository
 {
     private $entityManager;
-
     private $entityRepository;
 
-    public function __construct(
-        EntityManager $entityManager,
-        EntityRepository $entityRepository
-    ) {
+    public function __construct(EntityManager $entityManager, EntityRepository $entityRepository)
+    {
         $this->entityManager = $entityManager;
         $this->entityRepository = $entityRepository;
     }

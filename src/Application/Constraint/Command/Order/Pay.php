@@ -15,7 +15,6 @@ class Pay
      * )
      */
     private $orderId;
-
     /**
      * @Assert\NotBlank()
      * @Assert\Type(type="numeric")

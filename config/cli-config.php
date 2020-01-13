@@ -9,10 +9,12 @@ use Symfony\Component\Console\Helper\HelperSet;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 /** @var ContainerBuilder $container */
-$container = include __DIR__ . '/../bootstrap.php';
+$container = require __DIR__ . '/bootstrap.php';
 
 /** @var EntityManager $entityManager */
 $entityManager = $container->get('entityManager');
+
+/** @var array $config */
 $config = $container->getParameter('config')['migration'];
 
 $migrationConfiguration = new Configuration($entityManager->getConnection());

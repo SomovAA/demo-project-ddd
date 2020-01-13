@@ -8,7 +8,7 @@ class CreateOrderCest
     {
         $I->setHeader('Content-Type', 'application/json');
         $I->sendAjaxPostRequest('/api/v1/order/create');
-        $I->seeResponseCodeIs(HttpCode::CONFLICT);
+        $I->seeResponseCodeIs(HttpCode::BAD_REQUEST);
     }
 
     public function requestGetTest(AcceptanceTester $I)
@@ -22,6 +22,6 @@ class CreateOrderCest
     {
         $I->setHeader('Content-Type', 'application/json');
         $I->sendAjaxPostRequest('/api/v1/order/create', ['orderId' => 'trash', 'price' => 'trash']);
-        $I->seeResponseCodeIs(HttpCode::CONFLICT);
+        $I->seeResponseCodeIs(HttpCode::BAD_REQUEST);
     }
 }

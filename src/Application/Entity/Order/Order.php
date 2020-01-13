@@ -19,13 +19,11 @@ class Order
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
-
     /**
      * @var OrderStatus
      * @ORM\Embedded(class="OrderStatus", columnPrefix=false)
      */
     private $status;
-
     /**
      * @ORM\ManyToMany(targetEntity="Application\Entity\Product\Product", inversedBy="orders", cascade={"persist"})
      * @ORM\JoinTable(name="order_product",

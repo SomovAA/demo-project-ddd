@@ -15,8 +15,8 @@ class FixtureServiceFactory
     {
         /** @var EntityManager $entityManager */
         $entityManager = $container->get('entityManager');
-
         $directory = $container->getParameter('config')['fixtures']['directory'];
+
         $loader = new Loader();
         $loader->loadFromDirectory($directory);
         $fixtures = $loader->getFixtures();

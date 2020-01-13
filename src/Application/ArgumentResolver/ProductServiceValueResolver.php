@@ -13,9 +13,7 @@ use Symfony\Component\HttpKernel\ControllerMetadata\ArgumentMetadata;
 class ProductServiceValueResolver implements ArgumentValueResolverInterface
 {
     private $productRepository;
-
     private $fixtureService;
-
     private $transactionManager;
 
     public function __construct(
@@ -30,11 +28,7 @@ class ProductServiceValueResolver implements ArgumentValueResolverInterface
 
     public function supports(Request $request, ArgumentMetadata $argument)
     {
-        if (ProductService::class === $argument->getType()) {
-            return true;
-        }
-
-        return false;
+        return ProductService::class === $argument->getType();
     }
 
     public function resolve(Request $request, ArgumentMetadata $argument)

@@ -20,11 +20,7 @@ class ValidatorValueResolver implements ArgumentValueResolverInterface
 
     public function supports(Request $request, ArgumentMetadata $argument)
     {
-        if (ValidatorInterface::class === $argument->getType()) {
-            return true;
-        }
-
-        return false;
+        return ValidatorInterface::class === $argument->getType();
     }
 
     public function resolve(Request $request, ArgumentMetadata $argument)

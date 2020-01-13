@@ -50,6 +50,7 @@ $container->register('entityManager')
         $container->getParameter('config')['db'],
         new Reference('annotationMetadataConfiguration'),
     ]);
+// service
 $container->register('transactionManager', TransactionManager::class)
     ->setArguments([
         new Reference('entityManager'),
@@ -58,13 +59,35 @@ $container->register('client', Client::class)
     ->setArguments([
         ['verify' => false],
     ]);
-$container->register('requestStack', RequestStack::class);
-$container->register('controllerResolver', ControllerResolver::class);
 $container->register('translator')
     ->setFactory([TranslatorFactory::class, 'create'])
     ->setArguments([
         $container,
     ]);
+$container->register('paymentSystemService')
+    ->setFactory([PaymentSystemServiceFactory::class, 'create'])
+    ->setArguments([
+        $container,
+    ]);
+$container->register('fixtureService')
+    ->setFactory([FixtureServiceFactory::class, 'create'])
+    ->setArguments([
+        $container,
+    ]);
+$container->register('orderService', OrderService::class)
+    ->setArguments([
+        new Reference('orderRepository'),
+        new Reference('productRepository'),
+        new Reference('paymentSystemService'),
+        new Reference('transactionManager'),
+    ]);
+$container->register('productService', ProductService::class)
+    ->setArguments([
+        new Reference('productRepository'),
+        new Reference('fixtureService'),
+        new Reference('transactionManager'),
+    ]);
+// repository
 $container->register('productRepository')
     ->setFactory([ProductRepositoryFactory::class, 'create'])
     ->setArguments([
@@ -75,10 +98,19 @@ $container->register('orderRepository')
     ->setArguments([
         $container,
     ]);
-$container->register('paymentSystemService')
-    ->setFactory([PaymentSystemServiceFactory::class, 'create'])
+// controller
+$container->register('orderController', OrderController::class)->setLazy(true)
     ->setArguments([
-        $container,
+        new Reference('orderService'),
+    ]);
+$container->register('productController', ProductController::class)->setLazy(true)
+    ->setArguments([
+        new Reference('productService'),
+    ]);
+// resolver
+$container->register('validatorValueResolver', ValidatorValueResolver::class)
+    ->setArguments([
+        new Reference('translator'),
     ]);
 $container->register('orderServiceValueResolver', OrderServiceValueResolver::class)
     ->setArguments([
@@ -87,21 +119,13 @@ $container->register('orderServiceValueResolver', OrderServiceValueResolver::cla
         new Reference('paymentSystemService'),
         new Reference('transactionManager'),
     ]);
-$container->register('validatorValueResolver', ValidatorValueResolver::class)
-    ->setArguments([
-        new Reference('translator'),
-    ]);
-$container->register('fixtureService')
-    ->setFactory([FixtureServiceFactory::class, 'create'])
-    ->setArguments([
-        $container,
-    ]);
 $container->register('productServiceValueResolver', ProductServiceValueResolver::class)
     ->setArguments([
         new Reference('productRepository'),
         new Reference('fixtureService'),
         new Reference('transactionManager'),
     ]);
+// app
 $container->register('argumentResolver', ArgumentResolver::class)
     ->setArguments([
         null,
@@ -114,27 +138,6 @@ $container->register('argumentResolver', ArgumentResolver::class)
             ]
         ),
     ]);
-$container->register('orderService', OrderService::class)
-    ->setArguments([
-        new Reference('orderRepository'),
-        new Reference('productRepository'),
-        new Reference('paymentSystemService'),
-        new Reference('transactionManager'),
-    ]);
-$container->register('orderController', OrderController::class)->setLazy(true)
-    ->setArguments([
-        new Reference('orderService'),
-    ]);
-$container->register('productService', ProductService::class)
-    ->setArguments([
-        new Reference('productRepository'),
-        new Reference('fixtureService'),
-        new Reference('transactionManager'),
-    ]);
-$container->register('productController', ProductController::class)->setLazy(true)
-    ->setArguments([
-        new Reference('productService'),
-    ]);
 $container->setParameter('routes', include __DIR__ . '/routes.php');
 $container->register('context', RequestContext::class);
 $container->register('matcher', UrlMatcher::class)
@@ -142,6 +145,8 @@ $container->register('matcher', UrlMatcher::class)
         '%routes%',
         new Reference('context'),
     ]);
+$container->register('requestStack', RequestStack::class);
+$container->register('controllerResolver', ControllerResolver::class);
 $container->register('listener.router', RouterListener::class)
     ->setArguments([
         new Reference('matcher'),
@@ -155,8 +160,6 @@ $container->register('dispatcher', EventDispatcher::class)
     ->addMethodCall('addSubscriber', [new Reference('listener.router')])
     ->addMethodCall('addSubscriber', [new Reference('listener.response')])
     ->addMethodCall('addSubscriber', [new Reference('listener.error')]);
-
-
 $container->register('application', Application::class)
     ->setArguments([
         new Reference('dispatcher'),
