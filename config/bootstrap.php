@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use Composer\Autoload\ClassLoader;
 use Doctrine\Common\Annotations\AnnotationRegistry;
 use Dotenv\Dotenv;
@@ -24,4 +26,4 @@ AnnotationRegistry::registerLoader(function ($class) use ($loader) {
     return $loader->loadClass($class);
 });
 
-return require __DIR__ . '/container.php';
+require __DIR__ . '/container.php';

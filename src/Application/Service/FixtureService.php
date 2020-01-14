@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Application\Service;
 
 use Doctrine\Common\DataFixtures\Executor\ORMExecutor;
@@ -17,6 +19,6 @@ class FixtureService
 
     public function load(): void
     {
-        $this->executor->execute($this->fixtures);
+        $this->executor->execute($this->fixtures, true);
     }
 }

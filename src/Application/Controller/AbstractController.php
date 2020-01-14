@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Application\Controller;
 
 use Symfony\Component\Validator\ConstraintViolation;
@@ -7,7 +9,7 @@ use Symfony\Component\Validator\ConstraintViolationListInterface;
 
 abstract class AbstractController
 {
-    protected function getViolationMessages(ConstraintViolationListInterface $violations)
+    protected function getViolationMessages(ConstraintViolationListInterface $violations): array
     {
         if (!$violations->count()) {
             return [];

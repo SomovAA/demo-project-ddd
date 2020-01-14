@@ -1,8 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Application\ArgumentResolver;
 
-use Application\Repository\ProductRepositoryInterface;
+use Application\Repository\ProductRepository;
 use Application\Service\FixtureService;
 use Application\Service\ProductService;
 use Application\Service\TransactionManagerInterface;
@@ -17,7 +19,7 @@ class ProductServiceValueResolver implements ArgumentValueResolverInterface
     private $transactionManager;
 
     public function __construct(
-        ProductRepositoryInterface $productRepository,
+        ProductRepository $productRepository,
         FixtureService $fixtureService,
         TransactionManagerInterface $transactionManager
     ) {

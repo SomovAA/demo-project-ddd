@@ -1,19 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Application\Entity\User;
 
-class DummyUser
+class DummyUser extends User
 {
-    private $id = 1;
-    private $login = 'admin';
-
-    public function getId(): int
+    public function __construct()
     {
-        return $this->id;
-    }
-
-    public function getLogin(): string
-    {
-        return $this->login;
+        parent::__construct('admin');
+        $this->id = 1;
     }
 }

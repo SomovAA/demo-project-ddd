@@ -1,15 +1,15 @@
 <?php
 
+declare(strict_types=1);
+
 use Doctrine\DBAL\Tools\Console\Helper\ConnectionHelper;
 use Doctrine\Migrations\Configuration\Configuration;
 use Doctrine\Migrations\Tools\Console\Helper\ConfigurationHelper;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Tools\Console\Helper\EntityManagerHelper;
 use Symfony\Component\Console\Helper\HelperSet;
-use Symfony\Component\DependencyInjection\ContainerBuilder;
 
-/** @var ContainerBuilder $container */
-$container = require __DIR__ . '/bootstrap.php';
+require __DIR__ . '/bootstrap.php';
 
 /** @var EntityManagerInterface $entityManager */
 $entityManager = $container->get('entityManager');

@@ -1,8 +1,9 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Application\Constraint\Command\Order;
 
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Validator\Constraints as Assert;
 
 class Create
@@ -13,17 +14,14 @@ class Create
      * @Assert\Count(min="1", minMessage="Должен быть хотя бы один ID товара")
      * @Assert\All({
      *     @Assert\NotBlank,
-     *     @Assert\Regex(
-     *          pattern="/^[0-9]+$/",
-     *          message="ID товара должно быть целым числом"
-     *     )
+     *     @Assert\Type(type="int", message="ID товара должно быть целым числом")
      * })
      */
     private $productIds;
 
-    public function __construct(Request $request)
+    public function __construct(array $data)
     {
-        $this->productIds = $request->request->get('productIds', []);
+        $this->productIds = $data['productIds'] ?? null;
     }
 
     public function getProductIds(): array

@@ -1,8 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Application\Service;
 
-use Application\Repository\ProductRepositoryInterface;
+use Application\Entity\Product\Product;
+use Application\Repository\ProductRepository;
 
 class ProductService
 {
@@ -11,7 +14,7 @@ class ProductService
     private $transactionManager;
 
     public function __construct(
-        ProductRepositoryInterface $productRepository,
+        ProductRepository $productRepository,
         FixtureService $fixtureService,
         TransactionManagerInterface $transactionManager
     ) {
@@ -20,12 +23,23 @@ class ProductService
         $this->transactionManager = $transactionManager;
     }
 
+    /**
+     * @return object[]|Product[]
+     */
     public function generateProducts()
     {
         $this->transactionManager->transactional(function () {
             $this->fixtureService->load();
         });
 
+        return $this->productRepository->findAll();
+    }
+
+    /**
+     * @return array|Product[]
+     */
+    public function list(): array
+    {
         return $this->productRepository->findAll();
     }
 }

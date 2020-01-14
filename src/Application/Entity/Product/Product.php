@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Application\Entity\Product;
 
 use Doctrine\Common\Collections\ArrayCollection;

@@ -1,9 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Application\ArgumentResolver;
 
-use Application\Repository\OrderRepositoryInterface;
-use Application\Repository\ProductRepositoryInterface;
+use Application\Repository\OrderRepository;
+use Application\Repository\ProductRepository;
+use Application\Repository\UserRepositoryInterface;
 use Application\Service\OrderService;
 use Application\Service\PaymentSystemService;
 use Application\Service\TransactionManagerInterface;
@@ -17,17 +20,20 @@ class OrderServiceValueResolver implements ArgumentValueResolverInterface
     private $productRepository;
     private $paymentSystemService;
     private $transactionManager;
+    private $userRepository;
 
     public function __construct(
-        OrderRepositoryInterface $orderRepository,
-        ProductRepositoryInterface $productRepository,
+        OrderRepository $orderRepository,
+        ProductRepository $productRepository,
         PaymentSystemService $paymentSystemService,
-        TransactionManagerInterface $transactionManager
+        TransactionManagerInterface $transactionManager,
+        UserRepositoryInterface $userRepository
     ) {
         $this->orderRepository = $orderRepository;
         $this->productRepository = $productRepository;
         $this->paymentSystemService = $paymentSystemService;
         $this->transactionManager = $transactionManager;
+        $this->userRepository = $userRepository;
     }
 
     public function supports(Request $request, ArgumentMetadata $argument)
@@ -41,7 +47,8 @@ class OrderServiceValueResolver implements ArgumentValueResolverInterface
             $this->orderRepository,
             $this->productRepository,
             $this->paymentSystemService,
-            $this->transactionManager
+            $this->transactionManager,
+            $this->userRepository
         );
     }
 }

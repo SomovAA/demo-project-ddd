@@ -35,6 +35,7 @@
   },
   "scripts": {
     "migrate": "doctrine-migrations migrations:migrate --ansi",
+    "migrate-diff": "doctrine-migrations migrations:diff --ansi",
     "test": "codecept run --ansi",
     "copy-env": [
       "php -r \"copy('.env.example', '.env');\""

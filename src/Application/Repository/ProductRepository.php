@@ -1,12 +1,15 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Application\Repository;
 
 use Application\Entity\Product\Product;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
+use Doctrine\Persistence\ObjectRepository;
 
-class ProductRepository implements ProductRepositoryInterface
+class ProductRepository implements ObjectRepository, FindByIdsRepositoryInterface
 {
     private $entityManager;
     private $entityRepository;
@@ -64,5 +67,15 @@ class ProductRepository implements ProductRepositoryInterface
     public function getClassName()
     {
         return $this->entityRepository->getClassName();
+    }
+
+    /**
+     * @param array $ids
+     *
+     * @return Product[]|array|object[]
+     */
+    public function findByIds(array $ids)
+    {
+        return $this->findBy(['id' => $ids]);
     }
 }

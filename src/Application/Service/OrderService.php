@@ -1,15 +1,20 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Application\Service;
 
 use Application\Entity\Order\Order;
+use Application\Entity\User\User;
+use Application\Exception\Order\OrderIsAlreadyPaidException;
 use Application\Exception\Order\OrderNotFoundException;
 use Application\Exception\Order\OrderNotNewException;
 use Application\Exception\Order\OrderPaymentFailedException;
 use Application\Exception\Order\OrderPriceDoesNotMatchException;
 use Application\Exception\Order\OrderWithoutProductCannotBeCreatedException;
-use Application\Repository\OrderRepositoryInterface;
-use Application\Repository\ProductRepositoryInterface;
+use Application\Repository\OrderRepository;
+use Application\Repository\ProductRepository;
+use Application\Repository\UserRepositoryInterface;
 
 class OrderService
 {
@@ -17,17 +22,20 @@ class OrderService
     private $productRepository;
     private $paymentSystemService;
     private $transactionManager;
+    private $userRepository;
 
     public function __construct(
-        OrderRepositoryInterface $orderRepository,
-        ProductRepositoryInterface $productRepository,
+        OrderRepository $orderRepository,
+        ProductRepository $productRepository,
         PaymentSystemService $paymentSystemService,
-        TransactionManagerInterface $transactionManager
+        TransactionManagerInterface $transactionManager,
+        UserRepositoryInterface $userRepository
     ) {
         $this->orderRepository = $orderRepository;
         $this->productRepository = $productRepository;
         $this->paymentSystemService = $paymentSystemService;
         $this->transactionManager = $transactionManager;
+        $this->userRepository = $userRepository;
     }
 
     /**
@@ -38,7 +46,7 @@ class OrderService
      */
     public function create(array $productIds): Order
     {
-        $products = $this->productRepository->findBy(['id' => $productIds]);
+        $products = $this->productRepository->findByIds($productIds);
 
         if (!$products) {
             throw new OrderWithoutProductCannotBeCreatedException();
@@ -46,6 +54,10 @@ class OrderService
 
         $order = new Order();
         $order->addProducts($products);
+
+        /** @var User $user */
+        $user = $this->userRepository->get();
+        $order->attachUser($user);
 
         $this->transactionManager->transactional(function () use ($order) {
             $this->orderRepository->create($order);
@@ -63,6 +75,7 @@ class OrderService
      * @throws OrderNotNewException
      * @throws OrderPaymentFailedException
      * @throws OrderPriceDoesNotMatchException
+     * @throws OrderIsAlreadyPaidException
      */
     public function pay(float $price, int $id): Order
     {
@@ -72,11 +85,18 @@ class OrderService
             throw new OrderNotFoundException();
         }
 
+        /** @var User $user */
+        $user = $this->userRepository->get();
+
+        if (!$order->checkAttachedUser($user)) {
+            throw new OrderNotFoundException();
+        }
+
         if (!$order->isNew()) {
             throw new OrderNotNewException();
         }
 
-        if (!$this->checkPriceEquality($price, $order->getPrice())) {
+        if (!$order->checkPriceEquality($price)) {
             throw new OrderPriceDoesNotMatchException();
         }
 
@@ -91,8 +111,14 @@ class OrderService
         return $order;
     }
 
-    private function checkPriceEquality(float $price, float $currentPrice): bool
+    /**
+     * @return array|Order[]
+     */
+    public function list(): array
     {
-        return $price === $currentPrice;
+        /** @var User $user */
+        $user = $this->userRepository->get();
+
+        return $this->orderRepository->findByUserId($user->getId());
     }
 }

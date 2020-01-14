@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 return [
     'db' => [
         'dbname' => getenv('DB_NAME'),

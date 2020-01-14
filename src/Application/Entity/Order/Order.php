@@ -1,8 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Application\Entity\Order;
 
 use Application\Entity\Product\Product;
+use Application\Entity\User\User;
 use Application\Exception\Order\OrderIsAlreadyNewException;
 use Application\Exception\Order\OrderIsAlreadyPaidException;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -39,6 +42,11 @@ class Order
      * @var Collection
      */
     private $products;
+
+    /**
+     * @ORM\Column(type="integer", name="user_id")
+     */
+    private $userId;
 
     public function __construct()
     {
@@ -83,9 +91,17 @@ class Order
         $this->status->makePaid();
     }
 
-    public function getProducts(): Collection
+    public function getStatus(): string
     {
-        return $this->products;
+        return $this->status->getStatus();
+    }
+
+    /**
+     * @return Product[]|array
+     */
+    public function getProducts(): array
+    {
+        return $this->products->toArray();
     }
 
     public function addProducts(array $products): void
@@ -99,12 +115,25 @@ class Order
     public function getPrice(): float
     {
         $price = 0.0;
-
-        /** @var Product $product */
         foreach ($this->getProducts() as $product) {
             $price += $product->getPrice();
         }
 
         return $price;
+    }
+
+    public function checkPriceEquality(float $price): bool
+    {
+        return $price === $this->getPrice();
+    }
+
+    public function checkAttachedUser(User $user): bool
+    {
+        return $user->getId() === $this->userId;
+    }
+
+    public function attachUser(User $user): void
+    {
+        $this->userId = $user->getId();
     }
 }

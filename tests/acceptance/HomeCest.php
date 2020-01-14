@@ -4,9 +4,9 @@ use Codeception\Util\HttpCode;
 
 class HomeCest
 {
-    public function runTest(AcceptanceTester $I)
+    public function successTest(AcceptanceTester $I)
     {
-        $I->setHeader('Content-Type', 'application/json');
+        $I->setHeader('Content-Type', 'text/html');
         $I->amOnPage('/');
         $I->seeResponseCodeIs(HttpCode::OK);
         $I->canSee('Hello');

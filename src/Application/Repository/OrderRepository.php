@@ -1,12 +1,15 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Application\Repository;
 
 use Application\Entity\Order\Order;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
+use Doctrine\Persistence\ObjectRepository;
 
-class OrderRepository implements OrderRepositoryInterface
+class OrderRepository implements ObjectRepository, CUDRepositoryInterface, FindByUserIdRepositoryInterface
 {
     private $entityManager;
     private $entityRepository;
@@ -97,5 +100,15 @@ class OrderRepository implements OrderRepositoryInterface
     public function getClassName()
     {
         return $this->entityRepository->getClassName();
+    }
+
+    /**
+     * @param $id
+     *
+     * @return Order[]|array|object[]
+     */
+    public function findByUserId($id)
+    {
+        return $this->findBy(['userId' => $id]);
     }
 }

@@ -1,13 +1,15 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Application\Controller;
 
-use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Response;
 
 class HomeController
 {
-    public function index(): JsonResponse
+    public function index(): Response
     {
-        return JsonResponse::create('Hello');
+        return new Response('Hello');
     }
 }

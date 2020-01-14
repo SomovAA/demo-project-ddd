@@ -1,15 +1,15 @@
 <?php
 
-use Application\Application;
-use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\HttpFoundation\Request;
+declare(strict_types=1);
 
-/** @var ContainerBuilder $container */
-$container = require dirname(__DIR__) . '/config/bootstrap.php';
+use Application\Application;
+use Application\Service\SmartRequest;
+
+require dirname(__DIR__) . '/config/bootstrap.php';
 
 /** @var Application $application */
 $application = $container->get('application');
 
-$request = Request::createFromGlobals();
+$request = SmartRequest::createFromGlobals();
 $response = $application->handle($request);
 $response->send();

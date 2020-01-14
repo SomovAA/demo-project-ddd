@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Application\Entity\Order;
 
 use Doctrine\ORM\Mapping as ORM;
@@ -27,6 +29,9 @@ class OrderStatus
         $this->status = $status;
     }
 
+    /**
+     * @return static
+     */
     public static function createNew()
     {
         return new static(self::NEW);

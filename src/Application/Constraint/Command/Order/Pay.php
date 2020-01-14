@@ -1,18 +1,16 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Application\Constraint\Command\Order;
 
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Validator\Constraints as Assert;
 
 class Pay
 {
     /**
      * @Assert\NotBlank()
-     * @Assert\Regex(
-     *      pattern="/^[0-9]+$/",
-     *      message="ID заказа должно быть целым числом"
-     * )
+     * @Assert\Type(type="int", message="ID заказа должно быть целым числом")
      */
     private $orderId;
     /**
@@ -21,18 +19,24 @@ class Pay
      */
     private $price;
 
-    public function __construct(Request $request)
+    public function __construct(array $data)
     {
-        $this->price = $request->request->get('price', 0.0);
-        $this->orderId = $request->request->get('orderId', 0);
+        $this->price = $data['price'] ?? null;
+        $this->orderId = $data['orderId'] ?? null;
     }
 
-    public function getOrderId(): int
+    /**
+     * @return int|mixed|null
+     */
+    public function getOrderId()
     {
         return $this->orderId;
     }
 
-    public function getPrice(): float
+    /**
+     * @return float|mixed|null
+     */
+    public function getPrice()
     {
         return $this->price;
     }

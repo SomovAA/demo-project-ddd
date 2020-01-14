@@ -3,7 +3,7 @@
 use Codeception\Exception\ConditionalAssertionFailed;
 use Codeception\Util\HttpCode;
 
-class PaymentSystemCest
+class PaymentSystemServiceCest
 {
     public function availableTest(AcceptanceTester $I)
     {

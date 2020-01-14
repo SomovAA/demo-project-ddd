@@ -1,17 +1,20 @@
 <?php
 
+declare(strict_types=1);
+
 use Application\Application;
 use Application\ArgumentResolver\OrderServiceValueResolver;
 use Application\ArgumentResolver\ProductServiceValueResolver;
 use Application\ArgumentResolver\ValidatorValueResolver;
+use Application\Controller\Api\OrderController;
+use Application\Controller\Api\ProductController;
 use Application\Controller\ErrorController;
-use Application\Controller\OrderController;
-use Application\Controller\ProductController;
 use Application\Factory\FixtureServiceFactory;
 use Application\Factory\OrderRepositoryFactory;
 use Application\Factory\PaymentSystemServiceFactory;
 use Application\Factory\ProductRepositoryFactory;
 use Application\Factory\TranslatorFactory;
+use Application\Repository\DummyUserRepository;
 use Application\Service\OrderService;
 use Application\Service\ProductService;
 use Application\Service\TransactionManager;
@@ -80,6 +83,7 @@ $container->register('orderService', OrderService::class)
         new Reference('productRepository'),
         new Reference('paymentSystemService'),
         new Reference('transactionManager'),
+        new Reference('userRepository'),
     ]);
 $container->register('productService', ProductService::class)
     ->setArguments([
@@ -98,6 +102,7 @@ $container->register('orderRepository')
     ->setArguments([
         $container,
     ]);
+$container->register('userRepository', DummyUserRepository::class);
 // controller
 $container->register('orderController', OrderController::class)->setLazy(true)
     ->setArguments([
@@ -118,6 +123,7 @@ $container->register('orderServiceValueResolver', OrderServiceValueResolver::cla
         new Reference('productRepository'),
         new Reference('paymentSystemService'),
         new Reference('transactionManager'),
+        new Reference('userRepository'),
     ]);
 $container->register('productServiceValueResolver', ProductServiceValueResolver::class)
     ->setArguments([
