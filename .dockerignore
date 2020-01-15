@@ -1,0 +1,15 @@
+# IDE
+/.idea
+
+# Composer
+/vendor
+
+# Env
+/.env
+
+# Tests
+/tests/_support/_generated/*
+/tests/_log/*
+/tests/_temp/*
+/tests/_output/*
+!/tests/_output/.gitkeep

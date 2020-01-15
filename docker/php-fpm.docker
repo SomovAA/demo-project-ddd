@@ -1,0 +1,11 @@
+FROM php:7.3-fpm
+
+RUN apt-get update && apt-get install -y \
+    libmcrypt-dev \
+    libzip-dev \
+    && docker-php-ext-configure zip --with-libzip=/usr/include \
+    && docker-php-ext-install zip \
+    && docker-php-ext-install mbstring \
+    && docker-php-ext-install pdo_mysql
+
+WORKDIR /var/www

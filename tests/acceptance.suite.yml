@@ -5,9 +5,18 @@
 # If you need both WebDriver and PHPBrowser tests - create a separate suite.
 
 actor: AcceptanceTester
+#class_name: AcceptanceTester
 modules:
   enabled:
-    - PhpBrowser:
-        url: %SITE_SCHEME%://%SITE_HOST%:%SITE_PORT%
+    # ToDo: доделать
+    #   - WebDriver:
+    #       host: chrome
+    #       url: '%SITE_SCHEME%://%SITE_HOST%'
+    #       browser: chrome
+    #       port: 4444
+    #       window_size: maximize
     - \Helper\Acceptance
+    - Asserts
+    - PhpBrowser:
+        url: %SITE_SCHEME%://%SITE_HOST%:%DOCKER_NGINX_PORT%
   step_decorators: ~

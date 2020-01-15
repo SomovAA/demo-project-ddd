@@ -1,0 +1,132 @@
+{
+	"variables": [],
+	"info": {
+		"name": "demo-project-ddd",
+		"_postman_id": "ed42751e-7dc8-59e2-09f2-ed928994aee6",
+		"description": "",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "api",
+			"description": "",
+			"item": [
+				{
+					"name": "products",
+					"description": "",
+					"item": [
+						{
+							"name": "generate",
+							"request": {
+								"url": "http://127.0.0.1:8080/api/v1/products/generate",
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"description": ""
+									}
+								],
+								"body": {},
+								"description": "Генерация 20 товаров и их вывод на экран"
+							},
+							"response": []
+						},
+						{
+							"name": "list",
+							"request": {
+								"url": "http://127.0.0.1:8080/api/v1/products",
+								"method": "GET",
+								"header": [],
+								"body": {},
+								"description": "Список всех товаров"
+							},
+							"response": []
+						}
+					],
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "orders",
+					"description": "",
+					"item": [
+						{
+							"name": "create",
+							"request": {
+								"url": "http://127.0.0.1:8080/api/v1/orders",
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"description": ""
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\"productIds\":[1,2]}"
+								},
+								"description": "Создание заказа"
+							},
+							"response": []
+						},
+						{
+							"name": "list",
+							"request": {
+								"url": "http://127.0.0.1:8080/api/v1/orders",
+								"method": "GET",
+								"header": [],
+								"body": {},
+								"description": "Список всех заказов"
+							},
+							"response": []
+						},
+						{
+							"name": "pay",
+							"request": {
+								"url": "http://127.0.0.1:8080/api/v1/orders/pay",
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"description": ""
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\"price\":11,\"orderId\":1}"
+								},
+								"description": "Оплата заказа"
+							},
+							"response": []
+						}
+					],
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "home",
+					"request": {
+						"url": "http://127.0.0.1:8080/api",
+						"method": "GET",
+						"header": [],
+						"body": {},
+						"description": "Главная страница API"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "home",
+			"request": {
+				"url": "http://127.0.0.1:8080/",
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"description": "Главная страница проекта"
+			},
+			"response": []
+		}
+	]
+}
