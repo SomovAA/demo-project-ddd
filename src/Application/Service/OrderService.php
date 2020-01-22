@@ -44,7 +44,7 @@ class OrderService
      * @return Order
      * @throws OrderWithoutProductCannotBeCreatedException
      */
-    public function save(array $productIds): Order
+    public function create(array $productIds): Order
     {
         $products = $this->productRepository->findByIds($productIds);
 
@@ -105,7 +105,7 @@ class OrderService
         $order->makePaid();
 
         $this->transactionManager->transactional(function () use ($order) {
-            $this->orderRepository->create($order);
+            $this->orderRepository->update($order);
         });
 
         return $order;

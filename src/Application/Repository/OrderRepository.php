@@ -27,8 +27,7 @@ class OrderRepository implements ObjectRepository, CUDRepositoryInterface, FindB
      */
     public function create($object)
     {
-        $this->entityManager->persist($object);
-        $this->entityManager->flush();
+        $this->save($object);
     }
 
     /**
@@ -38,8 +37,7 @@ class OrderRepository implements ObjectRepository, CUDRepositoryInterface, FindB
      */
     public function update($object)
     {
-        $this->entityManager->persist($object);
-        $this->entityManager->flush();
+        $this->save($object);
     }
 
     /**
@@ -110,5 +108,16 @@ class OrderRepository implements ObjectRepository, CUDRepositoryInterface, FindB
     public function findByUserId($id)
     {
         return $this->findBy(['userId' => $id]);
+    }
+
+    /**
+     * @param Order $object
+     *
+     * @return void
+     */
+    private function save($object)
+    {
+        $this->entityManager->persist($object);
+        $this->entityManager->flush();
     }
 }
