@@ -37,7 +37,7 @@ class OrderController extends AbstractController
         }
 
         try {
-            $order = $this->orderService->create($value->getProductIds());
+            $order = $this->orderService->save($value->getProductIds());
         } catch (Exception $exception) {
             return JsonResponseApiBuilder::create()
                 ->status(Response::HTTP_BAD_REQUEST)

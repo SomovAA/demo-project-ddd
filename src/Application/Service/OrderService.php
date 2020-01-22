@@ -44,7 +44,7 @@ class OrderService
      * @return Order
      * @throws OrderWithoutProductCannotBeCreatedException
      */
-    public function create(array $productIds): Order
+    public function save(array $productIds): Order
     {
         $products = $this->productRepository->findByIds($productIds);
 
