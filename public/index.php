@@ -8,7 +8,7 @@ use Application\Service\SmartRequest;
 require dirname(__DIR__) . '/config/bootstrap.php';
 
 /** @var Application $application */
-$application = $container->get('application');
+$application = $container->get(Application::class);
 
 $request = SmartRequest::createFromGlobals();
 $response = $application->handle($request);

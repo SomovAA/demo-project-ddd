@@ -12,7 +12,7 @@ use Symfony\Component\Console\Helper\HelperSet;
 require __DIR__ . '/bootstrap.php';
 
 /** @var EntityManagerInterface $entityManager */
-$entityManager = $container->get('entityManager');
+$entityManager = $container->get(EntityManagerInterface::class);
 
 /** @var array $config */
 $config = $container->getParameter('config')['migration'];

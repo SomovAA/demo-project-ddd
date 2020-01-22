@@ -16,7 +16,7 @@ class OrderRepositoryFactory
     public static function create(ContainerInterface $container)
     {
         /** @var EntityManagerInterface $entityManager */
-        $entityManager = $container->get('entityManager');
+        $entityManager = $container->get(EntityManagerInterface::class);
 
         /** @var ObjectRepository|EntityRepository $repository */
         $repository = $entityManager->getRepository(Order::class);

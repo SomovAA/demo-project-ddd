@@ -9,18 +9,11 @@ use Doctrine\Common\DataFixtures\Executor\ORMExecutor;
 use Doctrine\Common\DataFixtures\Loader;
 use Doctrine\Common\DataFixtures\Purger\ORMPurger;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 
 class FixtureServiceFactory
 {
-    public static function create(ContainerInterface $container)
+    public static function create(EntityManagerInterface $entityManager, array $config)
     {
-        /** @var EntityManagerInterface $entityManager */
-        $entityManager = $container->get('entityManager');
-
-        /** @var array $config */
-        $config = $container->getParameter('config');
-
         /** @var string $directory */
         $directory = $config['fixtures']['directory'];
 
