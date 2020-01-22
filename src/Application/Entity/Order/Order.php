@@ -136,4 +136,16 @@ class Order
     {
         $this->userId = $user->getId();
     }
+
+    public function getDiffProductIds(array $productIds): array
+    {
+        $ids = [];
+
+        /** @var Product $product */
+        foreach ($this->products as $product) {
+            $ids[] = $product->getId();
+        }
+
+        return array_diff($productIds, $ids);
+    }
 }

@@ -13,6 +13,7 @@ use Application\Exception\Order\OrderNotFoundException;
 use Application\Exception\Order\OrderNotNewException;
 use Application\Exception\Order\OrderPaymentFailedException;
 use Application\Exception\Order\OrderPriceDoesNotMatchException;
+use Application\Exception\Order\OrderSuchProductsDoNotExistException;
 use Application\Exception\Order\OrderWithoutProductCannotBeCreatedException;
 use Application\Repository\OrderRepository;
 use Application\Repository\ProductRepository;
@@ -44,6 +45,7 @@ class OrderService
      * @param OrderCreateDTO $dto
      *
      * @return Order
+     * @throws OrderSuchProductsDoNotExistException
      * @throws OrderWithoutProductCannotBeCreatedException
      */
     public function create(OrderCreateDTO $dto): Order
@@ -56,6 +58,12 @@ class OrderService
 
         $order = new Order();
         $order->addProducts($products);
+
+        if ($diffIds = $order->getDiffProductIds($dto->getProductIds())) {
+            throw new OrderSuchProductsDoNotExistException(
+                sprintf('Such products %s do not exist. Order cannot be created', implode(', ', $diffIds))
+            );
+        }
 
         /** @var User $user */
         $user = $this->userRepository->get();
