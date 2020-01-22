@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Application\Controller\Api;
 
-use Application\DTO\OrderPayDTO;
 use Application\Controller\AbstractController;
 use Application\DTO\OrderCreateDTO;
+use Application\DTO\OrderPayDTO;
 use Application\Service\JsonResponseApiBuilder;
 use Application\Service\OrderService;
 use Exception;
@@ -27,24 +27,15 @@ class OrderController extends AbstractController
     public function create(Request $request, ValidatorInterface $validator): JsonResponse
     {
         $orderCreateDTO = new OrderCreateDTO($request->request->all());
-        $violations = $validator->validate($orderCreateDTO);
 
-        if ($messages = $this->getViolationMessages($violations)) {
-            return JsonResponseApiBuilder::create()
-                ->status(Response::HTTP_UNPROCESSABLE_ENTITY)
-                ->success(false)
-                ->errors($messages)
-                ->build();
+        if ($jsonResponseError = $this->getJsonResponseError($validator->validate($orderCreateDTO))) {
+            return $jsonResponseError;
         }
 
         try {
             $order = $this->orderService->create($orderCreateDTO);
         } catch (Exception $exception) {
-            return JsonResponseApiBuilder::create()
-                ->status(Response::HTTP_BAD_REQUEST)
-                ->success(false)
-                ->exception($exception)
-                ->build();
+            return $this->getJsonResponseException($exception);
         }
 
         return JsonResponseApiBuilder::create()
@@ -56,24 +47,15 @@ class OrderController extends AbstractController
     public function pay(Request $request, ValidatorInterface $validator): JsonResponse
     {
         $orderPayDTO = new OrderPayDTO($request->request->all());
-        $violations = $validator->validate($orderPayDTO);
 
-        if ($messages = $this->getViolationMessages($violations)) {
-            return JsonResponseApiBuilder::create()
-                ->status(Response::HTTP_UNPROCESSABLE_ENTITY)
-                ->success(false)
-                ->errors($messages)
-                ->build();
+        if ($jsonResponseError = $this->getJsonResponseError($validator->validate($orderPayDTO))) {
+            return $jsonResponseError;
         }
 
         try {
             $this->orderService->pay($orderPayDTO);
         } catch (Exception $exception) {
-            return JsonResponseApiBuilder::create()
-                ->status(Response::HTTP_BAD_REQUEST)
-                ->success(false)
-                ->exception($exception)
-                ->build();
+            return $this->getJsonResponseException($exception);
         }
 
         return JsonResponseApiBuilder::create()->build();
@@ -84,11 +66,7 @@ class OrderController extends AbstractController
         try {
             $orders = $this->orderService->list();
         } catch (Exception $exception) {
-            return JsonResponseApiBuilder::create()
-                ->status(Response::HTTP_BAD_REQUEST)
-                ->success(false)
-                ->exception($exception)
-                ->build();
+            return $this->getJsonResponseException($exception);
         }
 
         $data = [];
