@@ -21,10 +21,10 @@ class PaymentSystemService
     }
 
     /**
-     * @return bool
+     * @return void
      * @throws OrderPaymentFailedException
      */
-    public function pay(): bool
+    public function pay(): void
     {
         try {
             $response = $this->client->get($this->config['payment_system']['url']);
@@ -32,7 +32,9 @@ class PaymentSystemService
             throw new OrderPaymentFailedException();
         }
 
-        return $this->statusCodeIsOk($response->getStatusCode());
+        if (!$this->statusCodeIsOk($response->getStatusCode())) {
+            throw new OrderPaymentFailedException();
+        }
     }
 
     private function statusCodeIsOk(int $statusCode): bool
