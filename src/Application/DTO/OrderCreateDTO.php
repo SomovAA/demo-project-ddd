@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Application\Constraint\Command\Order;
+namespace Application\DTO;
 
 use Symfony\Component\Validator\Constraints as Assert;
 
-class Create
+class OrderCreateDTO
 {
     /**
      * @Assert\NotBlank()

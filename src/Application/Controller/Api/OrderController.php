@@ -4,8 +4,9 @@ declare(strict_types=1);
 
 namespace Application\Controller\Api;
 
-use Application\Constraint\Command as Command;
+use Application\DTO\OrderPayDTO;
 use Application\Controller\AbstractController;
+use Application\DTO\OrderCreateDTO;
 use Application\Service\JsonResponseApiBuilder;
 use Application\Service\OrderService;
 use Exception;
@@ -25,8 +26,8 @@ class OrderController extends AbstractController
 
     public function create(Request $request, ValidatorInterface $validator): JsonResponse
     {
-        $value = new Command\Order\Create($request->request->all());
-        $violations = $validator->validate($value);
+        $orderCreateDTO = new OrderCreateDTO($request->request->all());
+        $violations = $validator->validate($orderCreateDTO);
 
         if ($messages = $this->getViolationMessages($violations)) {
             return JsonResponseApiBuilder::create()
@@ -37,7 +38,7 @@ class OrderController extends AbstractController
         }
 
         try {
-            $order = $this->orderService->create($value->getProductIds());
+            $order = $this->orderService->create($orderCreateDTO);
         } catch (Exception $exception) {
             return JsonResponseApiBuilder::create()
                 ->status(Response::HTTP_BAD_REQUEST)
@@ -54,8 +55,8 @@ class OrderController extends AbstractController
 
     public function pay(Request $request, ValidatorInterface $validator): JsonResponse
     {
-        $value = new Command\Order\Pay($request->request->all());
-        $violations = $validator->validate($value);
+        $orderPayDTO = new OrderPayDTO($request->request->all());
+        $violations = $validator->validate($orderPayDTO);
 
         if ($messages = $this->getViolationMessages($violations)) {
             return JsonResponseApiBuilder::create()
@@ -66,7 +67,7 @@ class OrderController extends AbstractController
         }
 
         try {
-            $this->orderService->pay($value->getPrice(), $value->getOrderId());
+            $this->orderService->pay($orderPayDTO);
         } catch (Exception $exception) {
             return JsonResponseApiBuilder::create()
                 ->status(Response::HTTP_BAD_REQUEST)

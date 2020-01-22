@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Application\Service;
 
+use Application\DTO\OrderCreateDTO;
+use Application\DTO\OrderPayDTO;
 use Application\Entity\Order\Order;
 use Application\Entity\User\User;
 use Application\Exception\Order\OrderIsAlreadyPaidException;
@@ -39,14 +41,14 @@ class OrderService
     }
 
     /**
-     * @param array $productIds
+     * @param OrderCreateDTO $dto
      *
      * @return Order
      * @throws OrderWithoutProductCannotBeCreatedException
      */
-    public function create(array $productIds): Order
+    public function create(OrderCreateDTO $dto): Order
     {
-        $products = $this->productRepository->findByIds($productIds);
+        $products = $this->productRepository->findByIds($dto->getProductIds());
 
         if (!$products) {
             throw new OrderWithoutProductCannotBeCreatedException();
@@ -67,19 +69,18 @@ class OrderService
     }
 
     /**
-     * @param float $price
-     * @param int $id
+     * @param OrderPayDTO $dto
      *
      * @return object|Order
+     * @throws OrderIsAlreadyPaidException
      * @throws OrderNotFoundException
      * @throws OrderNotNewException
      * @throws OrderPaymentFailedException
      * @throws OrderPriceDoesNotMatchException
-     * @throws OrderIsAlreadyPaidException
      */
-    public function pay(float $price, int $id): Order
+    public function pay(OrderPayDTO $dto): Order
     {
-        $order = $this->orderRepository->find($id);
+        $order = $this->orderRepository->find($dto->getOrderId());
 
         if (!$order) {
             throw new OrderNotFoundException();
@@ -96,7 +97,7 @@ class OrderService
             throw new OrderNotNewException();
         }
 
-        if (!$order->checkPriceEquality($price)) {
+        if (!$order->checkPriceEquality($dto->getPrice())) {
             throw new OrderPriceDoesNotMatchException();
         }
 
